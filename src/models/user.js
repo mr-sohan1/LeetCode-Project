@@ -23,7 +23,10 @@ const userSchema = new Schema({
         lowercase : true,
         immutable : true
     },
-
+    password: {
+        type : String ,
+        required : true,
+    },
     age :{
         type : Number,
         min : 5,
