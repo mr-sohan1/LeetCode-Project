@@ -1,9 +1,9 @@
-const valodator = require("validator")
+const validator = require("validator")
 
 const validate = (data)=>{
 
 
-    const mandatoryField = ["firstName", "emailId", "password"];
+    const mandatoryField = ["firstname", "emailID", "password"];
 
     const IsAllowed = mandatoryField.every((k) =>
         Object.keys(data).includes(k)
@@ -12,7 +12,7 @@ const validate = (data)=>{
     if (!IsAllowed)
         throw new Error("Some Field Missing");
 
-    if (!validator.isEmail(data.emailId))
+    if (!validator.isEmail(data.emailID))
         throw new Error("Invalid Email");
 
     if (!validator.isStrongPassword(data.password))

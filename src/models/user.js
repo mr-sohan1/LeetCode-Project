@@ -10,7 +10,7 @@ const userSchema = new Schema({
     },
     lastname : {
         type : String,
-        required : true,
+        required : false,
         minlength:1,
         maxlength : 20,
         trim : true
