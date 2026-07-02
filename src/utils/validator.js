@@ -1,23 +1,29 @@
-const validator = require("validator")
+const validator = require("validator");
 
-const validate = (data)=>{
+const validate = (data) => {
 
+    console.log("BODY =", data);
 
     const mandatoryField = ["firstname", "emailID", "password"];
 
-    const IsAllowed = mandatoryField.every((k) =>
-        Object.keys(data).includes(k)
-    );
+    console.log("mandatoryField =", mandatoryField);
+    console.log("keys =", Object.keys(data));
 
-    if (!IsAllowed)
+    const isAllowed = mandatoryField.every((k) => {
+        console.log(k, Object.keys(data).includes(k));
+        return Object.keys(data).includes(k);
+    });
+
+    console.log("isAllowed =", isAllowed);
+
+    if (!isAllowed)
         throw new Error("Some Field Missing");
 
     if (!validator.isEmail(data.emailID))
         throw new Error("Invalid Email");
 
     if (!validator.isStrongPassword(data.password))
-        throw new Error("Weak Password");    
-
-}
+        throw new Error("Weak Password");
+};
 
 module.exports = validate;
