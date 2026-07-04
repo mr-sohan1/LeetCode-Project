@@ -10,12 +10,14 @@ problemRouter.put("/update/:id",adminMiddleware , updateProblem);
 
 problemRouter.delete("/delete/:id",adminMiddleware, deleteProblem);
 
-// // for user
+// for user
 
-// problemRouter.get("/:id",getProblembById );
+problemRouter.get("/problembyid/:id",userMiddleware,getProblemById);
 
-// problemRouter.get("/",getAllProblem );
+problemRouter.get("/getallproblem",userMiddleware,getAllProblem);
 
-// problemRouter.get("/user",solvedAllProblemByUser);
+// problemRouter.get("/problemsolvedbyuser",userMiddleware,getAllSolvedProblem);
+
+// problemRouter.get("/submittedproblem/:pid",userMiddleware,submittedproblem)
 
 module.exports = problemRouter ;

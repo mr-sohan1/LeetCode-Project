@@ -147,5 +147,26 @@ catch (err) {
 
 };
 
+const getProblemById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!id) {
+      return res.status(400).send("Missing Id...");
+    }
+    const getProblem = await Problem.findById(id).select(
+  "title description difficulty tags visibleTestCases starterCode referenceSolution _id"
+);
+
+    if (!getProblem) {
+      return res.status(404).send("Problem not Available...");
+    }
+    res.status(200).send(getProblem);
+  } 
+   catch (err) {
+    res.status(500).send("Error : " + err);
+  }
+};
+
 
 
