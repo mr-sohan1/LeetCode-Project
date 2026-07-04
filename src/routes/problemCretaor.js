@@ -8,7 +8,7 @@ problemRouter.post("/create", adminMiddleware , createProblem);
 
 problemRouter.put("/update/:id",adminMiddleware , updateProblem);
 
-// problemRouter.delete("/:id", deleteProblem);
+problemRouter.delete("/delete/:id",adminMiddleware, deleteProblem);
 
 // // for user
 

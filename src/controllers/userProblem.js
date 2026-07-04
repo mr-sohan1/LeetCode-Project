@@ -125,3 +125,27 @@ const updateProblem = async (req, res) => {
     res.status(500).send("Error: " + err.message);
   }
 };
+
+const deleteProblem = async(req,res)=>{
+ const {id}= req.params;
+try{
+   if(!id){
+      return res.status(400).send("Missing Id...");
+   }
+    const deletedProblem = await Problem.findByIdAndDelete(id);
+
+    if (!deletedProblem) {
+      res.status(404).send("Problem not Available...");
+    }
+    res.status(200).send("deletedProblem");
+}
+
+catch (err) {
+    res.status(500).send("Error: " + err.message);
+  
+}
+
+};
+
+
+
