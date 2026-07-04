@@ -2,8 +2,6 @@ const validator = require("validator");
 
 const validate = (data) => {
 
-    console.log("BODY =", data);
-
     const mandatoryField = ["firstname", "emailID", "password"];
 
     console.log("mandatoryField =", mandatoryField);

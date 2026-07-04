@@ -5,9 +5,8 @@ const jwt = require("jsonwebtoken");
 const redisClient = require("../config/redis");
 
 const register = async (req,res)=>{
+  
     try{
-      // chat gpt
-        console.log(req.body);
         validate(req.body)
         const {password} = req.body;
         req.body.password = await bcrypt.hash(password,10);
