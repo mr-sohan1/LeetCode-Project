@@ -1,23 +1,10 @@
-const {
-  getLanguageById,
-  submitBatch,
-  submitToken,
-} = require("../utils/problemUtility");
+const {getLanguageById, submitBatch, submitToken} = require("../utils/problemUtility");
 const Problem = require("../models/problem");
 const User=require("../models/user");
 
 const createProblem = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      difficulty,
-      tags,
-      visibleTestCases,
-      hiddenTestCases,
-      starterCode,
-      referenceSolution,
-    } = req.body;
+    const {title, description, difficulty, tags, visibleTestCases, hiddenTestCases, starterCode, referenceSolution} = req.body;
 
     for (const { language, completeCode } of referenceSolution) {
       const languageId = getLanguageById(language);
