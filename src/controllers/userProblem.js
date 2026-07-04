@@ -168,5 +168,29 @@ const getProblemById = async (req, res) => {
   }
 };
 
+const getAllProblem = async (req, res) => {
+  try {
+    const getProblem = await Problem.find({}).select('title tags');
+
+    if (getProblem.length == 0) {
+      res.status(404).send("Problem not Available...");
+    }
+    res.status(200).send(getProblem);
+  } catch (err) {
+    res.status(404).send("Error : " + err);
+  }
+};
+
+module.exports = {
+  createProblem,
+  updateProblem,
+  deleteProblem,
+  getProblemById,
+  getAllProblem,
+  getAllSolvedProblem
+};
+
+
+
 
 
