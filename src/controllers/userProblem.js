@@ -135,7 +135,7 @@ try{
     const deletedProblem = await Problem.findByIdAndDelete(id);
 
     if (!deletedProblem) {
-      res.status(404).send("Problem not Available...");
+     return res.status(404).send("Problem not Available...");
     }
     res.status(200).send("deletedProblem");
 }
