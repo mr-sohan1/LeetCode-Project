@@ -187,7 +187,7 @@ module.exports = {
   deleteProblem,
   getProblemById,
   getAllProblem,
-  getAllSolvedProblem
+  // getAllSolvedProblem
 };
 
 
