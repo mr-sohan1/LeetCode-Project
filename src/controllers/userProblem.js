@@ -170,7 +170,7 @@ const getProblemById = async (req, res) => {
 
 const getAllProblem = async (req, res) => {
   try {
-    const getProblem = await Problem.find({}).select('title tags');
+    const getProblem = await Problem.find({}).select('_id title tags difficulty');
 
     if (getProblem.length == 0) {
       res.status(404).send("Problem not Available...");
