@@ -15,7 +15,7 @@ app.use(cookieparser());
 
 app.use("/", authRouter);
 app.use("/problem",problemRouter);
-app.use("/submit",submitRouter);
+app.use("/submission",submitRouter);
 
 const InitializeConnection=async ()=>{
   try{
