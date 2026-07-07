@@ -181,6 +181,16 @@ const getAllProblem = async (req, res) => {
   }
 };
 
+// const getAllSolvedProblem = async(req,res)=>{
+
+//   try{
+       
+//   }
+//   catch(err){
+//     res.status(404).send(err)
+//   }
+// }
+
 module.exports = {
   createProblem,
   updateProblem,

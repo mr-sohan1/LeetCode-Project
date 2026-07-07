@@ -8,7 +8,6 @@ authRouter.post("/register",register);
 authRouter.post("/login",login);
 authRouter.post("/logout",userMiddleware,logout);
 authRouter.post("/admin/register", adminMiddleware ,adminRegister );
-// authRouter.post("/logout",logout);
 // authRouter.get("/profile",profile);
 
 module.exports = authRouter;
