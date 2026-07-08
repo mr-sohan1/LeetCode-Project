@@ -19,6 +19,7 @@ const userMiddleware = async (req, res, next) => {
     if (IsBlocked) throw new Error("Token is blocked, please login again");
 
     req.result = result;
+    console.log(req.result);
     next();
   } catch (err) {
     res.status(503).send("Error : " + err.message);

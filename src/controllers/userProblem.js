@@ -16,11 +16,11 @@ const createProblem = async (req, res) => {
       }
 
       const submissions = visibleTestCases.map((testCase) => ({
-        source_code: completeCode,
-        language_id: languageId,
-        stdin: testCase.input,
-        expected_output: testCase.output,
-      }));
+    source_code: completeCode,
+    language_id: languageId,
+    stdin: testCase.input,
+    expected_output: testCase.output,
+    }));
 
       const submitResult = await submitBatch(submissions);
 
@@ -181,15 +181,38 @@ const getAllProblem = async (req, res) => {
   }
 };
 
-// const getAllSolvedProblem = async(req,res)=>{
+const getAllSolvedProblem = async (req, res) => {
+  try {
+    const userId1 = req.result._id;
+    const user1 = await User.findById(userId1).populate({
+      path: 'problemSolved',
+      select: "_id title difficulty tags"
+    });
 
-//   try{
-       
-//   }
-//   catch(err){
-//     res.status(404).send(err)
-//   }
-// }
+    res.status(200).send(user1.problemSolved);
+  } catch (err) {
+    res.status(500).send("Server Error...")
+  }
+};
+
+const submittedProblem = async (req,res)=>{
+    try {
+
+    const userId = req.result._id;
+    const problemId = req.params.pid;
+
+    const ans = await Submission.find({ userId, problemId });
+
+    if (ans.length == 0)
+        res.status(200).send("No Submission is persent");
+
+    res.status(200).send(ans);
+
+}
+catch (err) {
+    res.status(500).send("Internal Server Error");
+}
+}
 
 module.exports = {
   createProblem,
@@ -197,7 +220,8 @@ module.exports = {
   deleteProblem,
   getProblemById,
   getAllProblem,
-  // getAllSolvedProblem
+  getAllSolvedProblem,
+  submittedProblem
 };
 
 
