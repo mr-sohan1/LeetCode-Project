@@ -9,5 +9,18 @@ authRouter.post("/login",login);
 authRouter.post("/logout",userMiddleware,logout);
 authRouter.post("/admin/register", adminMiddleware ,adminRegister );
 authRouter.delete("/delete",userMiddleware,deleteProfile);
+// Check-Auth
+authRouter.get('/check',userMiddleware, async (req,res)=>{
+    const reply={
+      firstName:req.result.firstName,
+      emailId:req.result.emailId,
+      _id:req.result._id,
+       role:req.result.role
+    }
+    res.status(200).json({
+      user:reply,
+      massage:"Valid User.."
+    });
+})
 
 module.exports = authRouter;
