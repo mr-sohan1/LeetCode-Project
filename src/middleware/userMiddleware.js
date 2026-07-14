@@ -5,26 +5,40 @@ const redisClient = require("../config/redis");
 const userMiddleware = async (req, res, next) => {
   try {
     const { token } = req.cookies;
-    if (!token) throw new Error("Token is not present.");
+    if (!token) {
+      return res.status(401).json({ message: "Token is not present." });
+    }
 
-    const payload = jwt.verify(token, process.env.JWT_KEY);
+    let payload;
+    try {
+      payload = jwt.verify(token, process.env.JWT_KEY);
+    } catch (jwtErr) {
+      return res.status(401).json({ message: "Invalid or expired token." });
+    }
+
     const { _id } = payload;
-    if (!_id) throw new Error("Invalid token");
+    if (!_id) {
+      return res.status(401).json({ message: "Invalid token payload." });
+    }
 
     const result = await User.findById(_id);
-    if (!result) throw new Error("User does not exist");
+    if (!result) {
+      return res.status(401).json({ message: "User does not exist." });
+    }
 
     // Check if this token is in the Redis blocklist (i.e., logged out)
-    const IsBlocked = await redisClient.exists(`token:${token}`);
-    if (IsBlocked) throw new Error("Token is blocked, please login again");
+    const isBlocked = await redisClient.exists(`token:${token}`);
+    if (isBlocked) {
+      return res.status(401).json({ message: "Token is blocked, please login again." });
+    }
 
     req.result = result;
-    console.log(req.result);
     next();
   } catch (err) {
-    res.status(503).send("Error : " + err.message);
+    // Only genuine infrastructure failures (DB down, Redis down, etc.) land here
+    console.error("userMiddleware error:", err);
+    res.status(503).json({ message: "Service temporarily unavailable." });
   }
 };
-
 
 module.exports = userMiddleware;

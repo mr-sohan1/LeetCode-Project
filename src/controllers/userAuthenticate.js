@@ -4,72 +4,102 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const redisClient = require("../config/redis");
 
-const register = async (req,res)=>{
-  
-    try{
-        validate(req.body)
-        const {password} = req.body;
-        req.body.password = await bcrypt.hash(password,10);
-        req.body.role = "user";
-        const user = await User.create(req.body)
+const register = async (req, res) => {
+  try {
+    validate(req.body);
 
-        const token = jwt.sign({_id:user._id,emailID: user.emailID, role : user.role},process.env.JWT_KEY, { expiresIn: 60 * 60 })
-        const reply = {
-        firstName: user.firstName,
-        emailId: user.emailId,
+    const { password } = req.body;
+
+    req.body.password = await bcrypt.hash(password, 10);
+    req.body.role = "user";
+
+    const user = await User.create(req.body);
+
+    const token = jwt.sign(
+      {
         _id: user._id,
-        role:user.role,
-    }
-        res.cookie("token",token,{maxAge:60 * 60 * 1000});
-          res.status(201).json({
-        user:reply,
-        message:"Loggin Successfully"
-    })
-    }
+        emailID: user.emailID,
+        role: user.role,
+      },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
 
-    catch (err) {
-    console.log(err);
-    res.status(400).send(err.message);
-}
-}
+    const reply = {
+      firstName: user.firstName,
+      emailID: user.emailID,
+      _id: user._id,
+      role: user.role,
+    };
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    res.status(201).json({
+      user: reply,
+      message: "Registered Successfully",
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+};
 
 const login = async (req, res) => {
   try {
     const { emailID, password } = req.body;
 
-    if (!emailID) throw new Error("Invalid Credentials");
-    if (!password) throw new Error("Invalid Credentials");
+    if (!emailID || !password) {
+      throw new Error("Invalid Credentials");
+    }
 
     const user = await User.findOne({ emailID });
-    if (!user) throw new Error("Invalid Credentials");
+
+    if (!user) {
+      throw new Error("Invalid Credentials");
+    }
 
     const match = await bcrypt.compare(password, user.password);
-    if (!match) throw new Error("Invalid Credentials");
-            const reply = {
-            firstName: user.firstName,
-            emailId: user.emailId,
-            _id: user._id,
-            role:user.role,
-        }
 
-   const token = jwt.sign(
-    {
+    if (!match) {
+      throw new Error("Invalid Credentials");
+    }
+
+    const token = jwt.sign(
+      {
         _id: user._id,
         emailID: user.emailID,
-        role: user.role
-    },
-    process.env.JWT_KEY,
-    { expiresIn: 60 * 60 }
-);
+        role: user.role,
+      },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" }
+    );
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000 });
-     res.status(201).json({
-            user:reply,
-            message:"Loggin Successfully"
-        })
-  } 
-  catch (err) {
-    res.status(401).send("Error : " + err.message);
+    const reply = {
+      firstName: user.firstName,
+      emailID: user.emailID,
+      _id: user._id,
+      role: user.role,
+    };
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      user: reply,
+      message: "Login Successful",
+    });
+  } catch (err) {
+    res.status(401).json({
+      message: err.message,
+    });
   }
 };
 
