@@ -1,7 +1,7 @@
 const {getLanguageById, submitBatch, submitToken} = require("../utils/problemUtility");
 const Problem = require("../models/problem");
 const User=require("../models/user");
-
+const Submission=require("../models/submission");
 const createProblem = async (req, res) => {
   try {
     const {title, description, difficulty, tags, visibleTestCases, hiddenTestCases, starterCode, referenceSolution} = req.body;
@@ -203,8 +203,9 @@ const submittedProblem = async (req,res)=>{
 
     const ans = await Submission.find({ userId, problemId });
 
-    if (ans.length == 0)
-        res.status(200).send("No Submission is persent");
+    if (ans.length == 0) {
+        return res.status(200).send([]);
+    }
 
     res.status(200).send(ans);
 
